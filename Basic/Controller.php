@@ -8,6 +8,7 @@ use BirdWorX\ModelDb\Basic\PathUrl;
 use BirdWorX\ModelDb\Exceptions\GeneralException;
 use BirdWorX\ModelDb\Exceptions\ServiceException;
 use BirdWorX\ModelDb\Exceptions\UniqueException;
+use OptX\Basic\Session;
 use ReflectionException;
 use ReflectionMethod;
 use BirdWorX\SimpleControl\Exceptions\UploadException;
@@ -63,9 +64,7 @@ abstract class Controller extends Template {
 	protected function __construct() {
 		parent::__construct();
 
-		if (!session_start()) {
-			die("Couldn't initialize PHP session ...");
-		}
+		Session::init();
 
 		$this->cssFiles = array();
 		$this->jsFilesTop = array();
