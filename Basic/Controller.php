@@ -66,6 +66,8 @@ abstract class Controller extends Template {
 
 		Session::init();
 
+		///	$_POST = json_decode(file_get_contents('php://input'), true);
+
 		$this->cssFiles = array();
 		$this->jsFilesTop = array();
 
@@ -324,7 +326,7 @@ abstract class Controller extends Template {
 	 * @return string
 	 */
 	public static function moduleUrl(): string {
-		return '/' . static::moduleIdentifier();
+		return Env::getBaseUrl() . static::moduleIdentifier();
 	}
 
 	/**
