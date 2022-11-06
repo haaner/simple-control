@@ -492,9 +492,7 @@ abstract class Controller extends Template {
 	}
 
 	/**
-	 * Liefert das Resultat des gewünschten Service bzw. des Renderings an den Browser aus.
-	 *
-	 * Hinweis: Diese Funktion kehrt niemals zurück!
+	 * Liefert das Resultat des gewünschten Service bzw. des Renderings an den Browser aus
 	 */
 	public function serve() {
 
@@ -520,4 +518,42 @@ abstract class Controller extends Template {
 			}
 		}
 	}
+
+	public static function init() {
+
+		// Falls (raw) JSON-Daten gesendet wurde, diese ins $_POST-Array übertragen
+		if (count($_POST) == 0) {
+			$raw_post_data = file_get_contents("php://input");
+			if ($raw_post_data != "") {
+				$_POST = json_decode($raw_post_data, true);
+
+				if (is_array($_POST)) {
+					$_REQUEST = array_merge($_REQUEST, $_POST);
+				}
+			}
+
+			unset($raw_post_data);
+		}
+/*
+		if (isset($_SERVER['HTTP_ORIGIN'])) {
+			$url = parse_url($_SERVER['HTTP_ORIGIN']);
+
+			if ($url !== false) {
+				$origin = $url['scheme'] . '://' . $url['host'];
+				if (array_key_exists('port', $url)) {
+					$origin .= ':' . $url['port'];
+				}
+
+				// CORS - Zugriffsschutz wird nicht benötigt
+				header('Access-Control-Allow-Origin: ' . $origin);
+
+				unset($origin);
+			}
+
+			unset($url);
+		}
+*/
+	}
 }
+
+Controller::init();
