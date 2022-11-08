@@ -8,10 +8,10 @@ use BirdWorX\ModelDb\Basic\PathUrl;
 use BirdWorX\ModelDb\Exceptions\GeneralException;
 use BirdWorX\ModelDb\Exceptions\ServiceException;
 use BirdWorX\ModelDb\Exceptions\UniqueException;
+use BirdWorX\SimpleControl\Exceptions\UploadException;
 use OptX\Basic\Session;
 use ReflectionException;
 use ReflectionMethod;
-use BirdWorX\SimpleControl\Exceptions\UploadException;
 
 /**
  * Class Controller
@@ -39,7 +39,7 @@ abstract class Controller extends Template {
 	/**
 	 * Der Dateiname des zu verwendenden Haupt-Templates
 	 */
-	protected ?string $mainTemplate = '';
+	protected string $mainTemplate;
 
 	/**
 	 * Die CSS Content-Klasse
@@ -72,6 +72,8 @@ abstract class Controller extends Template {
 		$this->jsFilesTop = array();
 
 		$this->baseTplFile = '';
+		$this->mainTemplate = '';
+		
 		$this->cacheId = null;
 		$this->requestHash = null;
 
@@ -134,23 +136,31 @@ abstract class Controller extends Template {
 	 * Bestimmt den konventionellen Pfad für den übergebenen Template-Namen (mit oder ohne .tpl - Endung) in Abhängigkeit von der aktuellen Controller-Klasse
 	 *
 	 * @param string|null $template_name
-	 * @param bool $use_general_version Wenn TRUE wird nicht die modulspezifische Template-Datei verwendet, sondern die allgemeingültige Variante
 	 *
 	 * @return string
 	 */
-	protected function conventionalTemplatePath(?string $template_name = null, bool $use_general_version = false): string {
+	protected function conventionalTemplatePath(?string $template_name = null): string {
 
-		if ($use_general_version) {
-			$dir = '';
-		} else {
-			$dir = \BirdWorX\ModelDb\Basic\Utils::camelCaseToUnderscore(lcfirst(static::classPrefix()));
-		}
+		/** @var Controller $class */
+		$class = static::class;
 
-		if ($dir !== '') {
-			$dir .= '/';
-		}
+		do {
+			$dir = \BirdWorX\Utils::camelCaseToUnderscore(lcfirst($class::classPrefix()));
 
-		return static::pathedTemplateName($template_name, $dir);
+			if ($dir !== '') {
+				$dir .= '/';
+			}
+
+			$tpl_name = static::pathedTemplateName($template_name, $dir);
+			if (file_exists($this->getTemplateDir() . '/' . $tpl_name)) {
+				break;
+			}
+
+			$class = get_parent_class($class);
+
+		} while ($class);
+
+		return $tpl_name;
 	}
 
 	/**
@@ -243,6 +253,7 @@ abstract class Controller extends Template {
 	 * Definiert welche Datei innerhalb einer speziellen Template-Sektion unter Verwendug der übergebenen Variablen zum Einsatz kommt.
 	 */
 	final protected function setTemplate(string &$template_area, string $template_rel_path, array $template_vars = array()) {
+
 		if ($template_rel_path != '' && !str_contains($template_rel_path, '/')) {
 			$template_rel_path = $this->conventionalTemplatePath($template_rel_path);
 		} else {
@@ -284,7 +295,10 @@ abstract class Controller extends Template {
 	 */
 	final public function setMainTemplate(string $main_template, array $template_vars = array()) {
 		$this->setTemplate($this->mainTemplate, $main_template, $template_vars);
-		$this->assign('mainTemplate', $this->mainTemplate);
+
+		if (file_exists($this->getTemplateDir() . $this->mainTemplate)) {
+			$this->assign('mainTemplate', $this->mainTemplate);
+		}
 	}
 
 	public function setCssContentClass(string $content_class) {
@@ -445,6 +459,8 @@ abstract class Controller extends Template {
 		$ret = false;
 
 		if (array_key_exists('service', $_REQUEST) && ($service = $_REQUEST['service']) !== null) {
+			$service = \BirdWorX\Utils::separatorToCamelCase($service, '-');
+
 			// Service-Methoden müssen mit 'Service' enden
 			$service .= 'Service';
 
@@ -481,7 +497,6 @@ abstract class Controller extends Template {
 	}
 
 	public function render() {
-
 
 		$this->addCss();
 		$this->addJs();
