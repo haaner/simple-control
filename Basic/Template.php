@@ -48,14 +48,14 @@ class Template extends ClassBase {
 				ErrorLog::logException($ex);
 			    return null;
 			} else {*/
-				Utils::dieWithUtf8(print_r($ex, true));
+				Utils::dieWithUtf8(print_r($ex, true), 500);
 //			}
 
 			return null;
 		}
 	}
 
-	/**
+ 	/**
 	 * Das Caching-Verhalten festlegen
 	 *
 	 * @param bool $enable
