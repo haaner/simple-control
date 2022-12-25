@@ -20,6 +20,9 @@ class Template extends ClassBase {
 
 			$this->smarty->debug_tpl = 'file:' . Env::PROJECT_PATH . 'vendor-mod/smarty/debug.tpl';
 
+			$this->smarty->setErrorReporting(E_ALL & ~E_NOTICE);
+			$this->smarty->muteUndefinedOrNullWarnings();
+
 			$this->smarty->setCacheDir(Env::getVarPath() . 'smarty/cache');
 			$this->smarty->setCompileDir(Env::getVarPath() . 'smarty/compile');
 
