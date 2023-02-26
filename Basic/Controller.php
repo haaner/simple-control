@@ -66,8 +66,6 @@ abstract class Controller extends Template {
 
 		Session::init();
 
-		///	$_POST = json_decode(file_get_contents('php://input'), true);
-
 		$this->cssFiles = array();
 		$this->jsFilesTop = array();
 
@@ -536,8 +534,8 @@ abstract class Controller extends Template {
 
 	public static function init() {
 
-		// Falls (raw) JSON-Daten gesendet wurde, diese ins $_POST-Array übertragen
-		if (count($_POST) == 0) {
+		// Falls JSON-Daten gesendet wurde, diese ins $_POST-Array übertragen
+		if (isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'application/json') {
 			$raw_post_data = file_get_contents("php://input");
 			if ($raw_post_data != "") {
 				$_POST = json_decode($raw_post_data, true);
