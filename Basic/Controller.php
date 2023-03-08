@@ -49,7 +49,7 @@ abstract class Controller extends Template {
 	/**
 	 * Titel (für die Anzeige im Browser)
 	 */
-	private string $title;
+	private ?string $title = null;
 
 	/**
 	 * Fürs Smarty-Templating relevante Cache-ID
@@ -191,6 +191,8 @@ abstract class Controller extends Template {
 	}
 
 	protected function setBaseTemplateVars() {
+
+		$this->assign('title', $this->getTitle());
 
 		$css_stylesheets = '';
 		foreach ($this->cssFiles as $name => $ts) {
