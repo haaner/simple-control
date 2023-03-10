@@ -18,6 +18,8 @@ use ReflectionMethod;
  */
 abstract class Controller extends Template {
 
+	protected static ?string $service;
+
 	protected string $cssDir = 'css/';
 	protected string $jsDir = 'js/';
 	protected string $uploadDir = 'upload/';
@@ -458,8 +460,8 @@ abstract class Controller extends Template {
 	private function checkServiceAndCall(): mixed {
 		$ret = false;
 
-		if (array_key_exists('service', $_REQUEST) && ($service = $_REQUEST['service']) !== null) {
-			$service = \BirdWorX\Utils::separatorToCamelCase($service, '-');
+		if (self::$service !== null) {
+			$service = \BirdWorX\Utils::separatorToCamelCase(self::$service, '-');
 
 			// Service-Methoden müssen mit 'Service' enden
 			$service .= 'Service';
@@ -535,6 +537,8 @@ abstract class Controller extends Template {
 	}
 
 	public static function init() {
+
+		self::$service = null;
 
 		// Falls JSON-Daten gesendet wurde, diese ins $_POST-Array übertragen
 		if (isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'application/json') {
