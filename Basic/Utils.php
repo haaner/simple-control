@@ -101,12 +101,12 @@ abstract class Utils {
 				$pos = strrpos($file_path_name, '.');
 
 				if ($pos !== false) {
-					$ext = '.' . strtolower(substr($file_path_name, $pos + 1));
+					$ext = '.' . substr($file_path_name, $pos + 1);
 				} else {
 					$pos = strrpos($file_name, '.');
 
 					if ($pos !== false) {
-						$ext = '.' . strtolower(substr($file_name, $pos + 1));
+						$ext = '.' . substr($file_name, $pos + 1);
 					} else {
 						$ext = '';
 					}

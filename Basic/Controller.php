@@ -381,7 +381,7 @@ abstract class Controller extends Template {
 	}
 
 	/**
-	 * Service-Funktion zur Abwicklung von Downloads aus dem Standard-Uploadverzeichnis des jeweiligen Vertriebspartners
+	 * Service-Funktion zur Abwicklung von Downloads aus dem Standard-Uploadverzeichnis
 	 *
 	 * @param string $path Pfad zur gewünschten Datei relativ zum Upload-Verzeichnis
 	 * @param bool $force_dialog Soll zwingend ein Download-Dialog angezeigt werden?
