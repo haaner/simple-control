@@ -1,0 +1,8 @@
+{
+    "name": "birdworx/simple-control",
+    "autoload": {
+        "psr-4": {
+            "BirdWorX\\SimpleControl\\": "."
+        }
+    }
+}
