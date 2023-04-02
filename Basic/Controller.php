@@ -234,7 +234,7 @@ abstract class Controller extends Template {
 			$request = '';
 
 			foreach ($_REQUEST as $key => $value) {
-				$request .= $key . '=' . $value . '|';
+				$request .= $key . '=' . json_encode($value) . '|';
 			}
 
 			$this->requestHash = md5($request);
