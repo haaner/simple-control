@@ -45,20 +45,19 @@ class Template extends ClassBase {
 	public function fetch(string $tpl_file_path): ?string {
 
 		try {
-			return $this->smarty->fetch($tpl_file_path);
+			return $this->smarty->fetch($tpl_file_path, $this->requestCacheId());
 		} catch (Exception $ex) {
-			/*if (Env::isProdSystem()) {
-				ErrorLog::logException($ex);
-			    return null;
-			} else {*/
+			if (Env::isProdSystem()) {
+				error_log($ex->__toString());
+			} else {
 				Utils::dieWithUtf8(print_r($ex, true), 500);
-//			}
+			}
 
 			return null;
 		}
 	}
 
- 	/**
+	/**
 	 * Das Caching-Verhalten festlegen
 	 *
 	 * @param bool $enable
@@ -114,7 +113,8 @@ class Template extends ClassBase {
 						return true;
 					}
 
-				} catch (Exception) { }
+				} catch (Exception) {
+				}
 			}
 		}
 
