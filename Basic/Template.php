@@ -101,14 +101,14 @@ class Template extends ClassBase {
 					if ($this->smarty->isCached($base_tpl_file, $cache_id)) {
 						// Der auskommentierte Code ist sinnvoll fürs Debugging, um unerklärliches Verhalten bei der Verwendung von {nocache}-Blöcken nachvollziehen zu können ...
 
-						//if(array_key_exists('isCached', $this->templateSmarty->_cache)) {
-						//    foreach($this->templateSmarty->_cache['isCached'] as $cached) {
-						//        /* @var Smarty_Internal_Template $cached */
-						//        if($cached->cached->has_nocache_code) {
-						//            return false;
-						//        }
-						//    }
-						//}
+//						if(array_key_exists('isCached', $this->smarty->_cache)) {
+//						    foreach($this->smarty->_cache['isCached'] as $cached) {
+//						        /* @var Smarty_Internal_Template $cached */
+//						        if($cached->cached->has_nocache_code) {
+//						            return false;
+//						        }
+//						    }
+//						}
 
 						return true;
 					}
