@@ -64,7 +64,7 @@ class Template extends ClassBase {
 	 * @param bool $renew_on_tpl_changes
 	 * @param int $lifetime Angabe in Sekunden
 	 */
-	protected function setCaching(bool $enable = true, bool $renew_on_tpl_changes = true, int $lifetime = 3600) {
+	public function setCaching(bool $enable = true, bool $renew_on_tpl_changes = true, int $lifetime = 3600) {
 
 		if (Env::isDevSystem()) {
 			$enable = false;
