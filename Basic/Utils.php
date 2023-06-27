@@ -4,7 +4,7 @@ namespace BirdWorX\SimpleControl\Basic;
 
 use BirdWorX\ModelDb\Basic\PathUrl;
 
-abstract class Utils {
+abstract class Utils extends \BirdWorX\Utils {
 
 	/**
 	 * Gibt den übergeben Parameter als getrimmten, UTF8-kodierten String zurück
