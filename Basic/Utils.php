@@ -140,6 +140,12 @@ abstract class Utils extends \BirdWorX\Utils {
 	}
 
 	public static function redirect(string $url, $http_status = 302) {
+
+		if ($_SERVER['HTTP_X_FETCH'] && $http_status === 302) {
+			// Leider ist das Redirect-Handling von fetch "fucked up", deshalb Workaround, @see: https://github.com/whatwg/fetch/issues/763#issuecomment-1430650132
+			$http_status = 204;
+		}
+
 		header('Location: ' . $url, true, $http_status);
 		die();
 	}
