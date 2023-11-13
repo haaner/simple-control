@@ -41,7 +41,7 @@ abstract class Controller extends Template {
 	/**
 	 * Der Dateiname des zu verwendenden Haupt-Templates
 	 */
-	protected string $mainTemplate;
+	protected ?string $mainTemplate;
 
 	/**
 	 * Die CSS Content-Klasse
@@ -194,6 +194,10 @@ abstract class Controller extends Template {
 
 	protected function setBaseTemplateVars() {
 
+		if ($this->mainTemplate && file_exists($this->getTemplateDir() . $this->mainTemplate)) {
+			$this->assign('mainTemplate', $this->mainTemplate);
+		}
+
 		$this->assign('title', $this->getTitle());
 
 		$css_stylesheets = '';
@@ -254,7 +258,7 @@ abstract class Controller extends Template {
 	/**
 	 * Definiert welche Datei innerhalb einer speziellen Template-Sektion unter Verwendug der übergebenen Variablen zum Einsatz kommt.
 	 */
-	final protected function setTemplate(string &$template_area, string $template_rel_path, array $template_vars = array()) {
+	final protected function setTemplate(?string &$template_area, string $template_rel_path, array $template_vars = array()) {
 
 		if ($template_rel_path != '' && !str_contains($template_rel_path, '/')) {
 			$template_rel_path = $this->conventionalTemplatePath($template_rel_path);
@@ -291,15 +295,13 @@ abstract class Controller extends Template {
 
 	/**
 	 * Template-Setter
-	 *
-	 * @param string $main_template
-	 * @param array $template_vars
 	 */
-	final public function setMainTemplate(string $main_template, array $template_vars = array()) {
-		$this->setTemplate($this->mainTemplate, $main_template, $template_vars);
+	final public function setMainTemplate(?string $main_template = null, array $template_vars = array()) {
 
-		if (file_exists($this->getTemplateDir() . $this->mainTemplate)) {
-			$this->assign('mainTemplate', $this->mainTemplate);
+		if ($main_template === null) {
+			$this->mainTemplate = null;
+		} else {
+			$this->setTemplate($this->mainTemplate, $main_template, $template_vars);
 		}
 	}
 
