@@ -23,8 +23,18 @@ class Template extends ClassBase {
 			$this->smarty->setErrorReporting(E_ALL & ~E_NOTICE);
 			$this->smarty->muteUndefinedOrNullWarnings();
 
-			$this->smarty->setCacheDir(Env::getCachePath() . 'smarty/');
-			$this->smarty->setCompileDir(Env::getCachePath() . 'smarty/compile');
+			$smarty_dir = Env::getCachePath() . 'smarty/';
+			$compile_dir = $smarty_dir . 'compile';
+
+			if (!file_exists($compile_dir)) {
+				mkdir($compile_dir, 0775, true);
+			}
+
+			@chmod($smarty_dir, 0775);
+			@chmod($compile_dir, 0775);
+
+			$this->smarty->setCacheDir($smarty_dir);
+			$this->smarty->setCompileDir($compile_dir);
 
 			$this->smarty->addPluginsDir(Env::PROJECT_PATH . 'vendor-mod/smarty/plugins');
 		}
