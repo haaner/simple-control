@@ -115,7 +115,11 @@ abstract class Utils extends \BirdWorX\Utils {
 				// Die Endung des Dateipfades verwenden
 				$file_name = preg_replace('/\.[^.]+$/', '', $file_name) . $ext;
 
-				header('Content-Disposition: attachment; filename="' . $file_name . '"');
+				if (str_contains($file_name, ' ')) {
+					$file_name = '"' . $file_name . '"';
+				}
+
+				header('Content-Disposition: attachment; filename=' . $file_name);
 
 				if ($ext == 'zip') {
 					$content_type = 'application/zip';
