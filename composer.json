@@ -1,5 +1,12 @@
 {
     "name": "birdworx/simple-control",
+    "description": "A simple PHP library, which provides controller functionality.",
+    "license": [
+        "GPL-3.0-or-later"
+    ],
+    "require": {
+	"php": ">=8.2"
+    },
     "autoload": {
         "psr-4": {
             "BirdWorX\\SimpleControl\\": "."
